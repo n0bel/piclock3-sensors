@@ -1,0 +1,17 @@
+kind: sensors
+
+# empty, so nothing is read until a config names its sensors
+probes: {}
+
+# empty draws each reading's name and value, as PiClock v1 did
+text: ''
+
+# a room's air changes slowly, and a DS18B20 takes most of a second to read
+refresh: 60
+
+conditions-provider: ''
+
+conditions:
+  temp: ''
+  humidity: ''
+  pressure: ''

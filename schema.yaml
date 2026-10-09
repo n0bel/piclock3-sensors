@@ -1,0 +1,46 @@
+description: >
+  Sensors wired to the Pi - a DS18B20 on the 1-Wire bus, or an I2C sensor
+  whose kernel driver an overlay loaded - as a line of text for the Text
+  widget to draw, and as conditions: another provider's, with these
+  readings in place of theirs.
+
+provides: [text, conditions]
+
+settings:
+
+  probes:
+    is: table
+    of: string
+    help: Sensor readings by the name the clock shows, each as probes.py
+      prints it, such as w1-28-0000058e0f0c or iio-bme280-humidity.
+  text:
+    is: string
+    help: The line, with a reading's name in braces where it goes, such as
+      'Inside {Inside}'.  Empty shows each name and its reading.
+  refresh:
+    is: number
+    unit: seconds
+    range: [5, 3600]
+    help: How often the sensors are read.
+  conditions-provider:
+    is: provider
+    provides: [conditions]
+    help: The provider whose conditions are handed on, for the sky and the
+      wind a sensor on the Pi cannot know.
+  conditions:
+    is: block
+    help: Which reading stands in for which of the conditions, each by its
+      name under probes.
+    of:
+      temp:
+        is: string
+        help: The reading shown as the temperature, in place of the
+          provider's.
+      humidity:
+        is: string
+        help: The reading shown as the humidity.  Unset, it is worked out
+          from the provider's dew point.
+      pressure:
+        is: string
+        help: The reading shown as the pressure, in place of the
+          provider's.

@@ -1,0 +1,53 @@
+# A clock with its sensors' readings along the bottom, run by naming it from
+# the top of a PiClock3 checkout:
+#
+#   python3 PyQtPiClock3.py plugins/Sensors/examples/sensors.yaml
+
+pages:
+  clock-page: {order: 0, layout: classic, theme: circuit}
+
+language: en
+
+location:
+  latitude: 45
+  longitude: -93
+  timezone:
+
+# none of these needs a key, so this runs on a fresh clone with no
+# ApiKeys.yaml at all
+providers:
+  openmeteo: {plugin: PiClock3.OpenMeteo}
+  metar:     {plugin: PiClock3.Metar, METAR: KMSP}
+
+  # the sensors, each named as probes.py prints it.  Its conditions are
+  # METAR's, with the outside probe's temperature in place of the airport's
+  sensors:
+    plugin: plugins.Sensors
+    probes:
+      Inside:  w1-28-0000058e0f0c
+      Outside: w1-28-0000031b54e7
+    text: 'Inside {Inside}'
+    conditions-provider: metar
+    conditions:
+      temp: Outside
+
+widgets:
+  clock: {plugin: PiClock3.AnalogClock, region: clock}
+  date:  {plugin: PiClock3.Date, region: date}
+
+  forecast:
+    plugin: PiClock3.Forecast
+    region: forecast
+    forecast-provider: openmeteo
+
+  current-conditions:
+    plugin: PiClock3.CurrentConditions
+    region: current
+    conditions-provider: sensors
+
+  indoors:
+    plugin: PiClock3.Text
+    region: bottom
+    text-provider: sensors
+
+logging-level: info
