@@ -45,9 +45,11 @@ widgets:
     region: current
     conditions-provider: sensors
 
+  # as large as fits, the way the almanac it takes the place of is
   indoors:
     plugin: PiClock3.Text
     region: bottom
     text-provider: sensors
+    font-size: 0
 
 logging-level: info

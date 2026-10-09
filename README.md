@@ -6,8 +6,8 @@ shows them as a line of text, the way PiClock v1 did, and can put them in
 the current-conditions panel in place of a weather service's.  It's
 [issue #37](https://github.com/n0bel/PiClock3/issues/37) of PiClock3.
 
-It has read the Pi's own temperature on a Pi 4.  It hasn't read a DS18B20
-or an I2C sensor on real hardware yet.
+It has read a DS18B20 on a Pi 3 and the Pi's own temperature on a Pi 4.
+No I2C sensor has been tried yet.
 
 ## What it reads
 
@@ -42,6 +42,11 @@ prints each reading the kernel has, the way the config names it:
 With two of the same sensor, warm one in your hand and run it again.  A
 running clock also lists, in its log, any reading its config doesn't name.
 
+A DS18B20 shows up twice: as `w1-28-…`, and as `hwmon-w1_slave_temp-temp1`,
+because the kernel also hands 1-Wire thermometers to hwmon.  They read the
+same, but only the `w1-` name says which probe it is, so with more than
+one probe, that's the one to use.
+
 ## Naming it in a config
 
 It's a provider: it reads the sensors once, and widgets draw what it says.
@@ -61,9 +66,12 @@ widgets:
     plugin: PiClock3.Text
     region: bottom
     text-provider: sensors
+    font-size: 0
 ```
 
-That draws `Inside 22.5°C   Outside 3.0°C`.  `text:` writes the line
+That draws `Inside 22.5°C   Outside 3.0°C`, as large as the region allows.
+The Text widget's own default, 0.3 of the region's height, comes out
+smaller than the almanac beside it.  `text:` writes the line
 yourself, with each name in braces where its reading goes:
 
 ```yaml
